@@ -1,0 +1,23 @@
+{
+  "name": "untischecker",
+  "version": "1.0.0",
+  "description": "A WebUntis Checker I made to notify me and my classmates about cancelled lessons / substitutions ",
+  "main": "index.js",
+  "repository": { 
+    "type": "git", 
+    "url": "https://github.com/LevinFX/UntisChecker" 
+} ,
+  "scripts": {
+    "test": "node ."
+  },
+  "author": "LevinFX",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "fs": "^0.0.1-security",
+    "node-cron": "^3.0.3",
+    "qrcode-terminal": "^0.12.0",
+    "webuntis": "^2.2.1",
+    "whatsapp-web.js": "^1.26.0"
+  }
+}
