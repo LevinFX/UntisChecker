@@ -22,7 +22,11 @@ git clone https://github.com/LevinFX/UntisChecker.git
 <p>2. make .env file (Example):</p>
 
 ```
-UNTIS_SCHOOL="Muster_Schule" UNTIS_USERNAME="John.Doe" UNTIS_PASSWORD="YourPassword" UNTIS_URL="123.webuntis.com" WHATSAPP_GROUP_NAME="Class 10a"
+UNTIS_SCHOOL="Muster_Schule" 
+UNTIS_USERNAME="John.Doe" 
+UNTIS_PASSWORD="YourPassword" 
+UNTIS_URL="123.webuntis.com" 
+WHATSAPP_GROUP_NAME="Class 10a"
 ```
 
 <p>3. execute with node</p>
