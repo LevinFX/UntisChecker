@@ -3,6 +3,7 @@ const fs = require('fs');
 const { WebUntis } = require('webuntis');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const cron = require('node-cron');
+const qr_code = require('qrcode-terminal');
 
 const UNTIS_SCHOOL = process.env.UNTIS_SCHOOL;
 const UNTIS_USERNAME = process.env.UNTIS_USERNAME;
@@ -22,6 +23,7 @@ const TIMETABLE_FILE = 'timetable.json';
 
 client.on('qr', qr => {
     console.log('Scanne diesen QR-Code in WhatsApp, um dich anzumelden:', qr);
+    qr_code.generate(qr, {small: true});
 });
 
 client.on('ready', () => {
@@ -55,7 +57,7 @@ async function fetchTimetable() {
         console.log("Rohdaten von WebUntis empfangen.");
         await untis.logout();
         
-        return classes.filter(lesson => lesson.code === 'cancelled' || lesson.code === 'substitution');
+        return classes.filter(lesson => lesson.code === 'cancelled' || lesson.code === 'substitution' || lesson.te?.some(teacher => teacher.id === 0));
     } catch (error) {
         console.error('Fehler beim Abrufen des Stundenplans:', error);
         return null;
@@ -81,7 +83,7 @@ function detectChanges(oldData, newData) {
         const subjectName = newClass.su?.[0]?.longname || 'Unbekanntes Fach';
         const dateFormatted = formatDate(newClass.date);
         const timeFormatted = formatTime(newClass.startTime);
-        const type = newClass.code === 'cancelled' ? 'Ausfall' : 'Vertretung';
+        const type = newClass.code === 'cancelled' ? 'Ausfall' : newClass.code === 'substitution' ? 'Vertretung' : newClass.te?.some(teacher => teacher.id === 0) ? 'Ausfall (Kein Lehrer eingetragen)' : 'Unbekannt';
         const message = `- \`\`\`NEU: \`\`\`*${subjectName} ${type}*\`\`\` am \`\`\`*${dateFormatted}*\`\`\`, um \`\`\`*${timeFormatted}*.\n`;
         
         if (!oldMap.has(newClass.id)) {
@@ -144,5 +146,10 @@ async function checkForChanges() {
     }
 }
 
+client.on('disconnected', () => {
+    console.error('WhatsApp-Client wurde getrennt. Starte neu...');
+    client.initialize();
+});
 client.initialize();
+
 cron.schedule('*/15 * * * * *', checkForChanges); // Läuft alle 15 Sekunden

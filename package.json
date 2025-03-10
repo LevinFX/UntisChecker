@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "A WebUntis Checker I made to notify me and my classmates about cancelled lessons / substitutions ",
   "main": "index.js",
-  "repository": { 
-    "type": "git", 
-    "url": "https://github.com/LevinFX/UntisChecker" 
-} ,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LevinFX/UntisChecker"
+  },
   "scripts": {
     "test": "node ."
   },
